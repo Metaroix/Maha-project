@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Candidates - Maha</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1A122B;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #F6C90E;
+      margin-bottom: 1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: #2B1F44;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .card.selected {
+      border: 2px solid #F6C90E;
+      transform: scale(1.03);
+    }
+
+    button {
+      background-color: #F6C90E;
+      color: #1A122B;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+
+    footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      color: #aaa;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Candidates to Invite</h1>
+  <div class="cards" id="candidateList"></div>
+  <button onclick="sendSelected()">Send Interview Invites</button>
+
+  <footer id="footerText"></footer>
+
+  <script>
+    const candidates = [
+      { id: 1, name: "Aisha Bello", role: "Frontend Developer" },
+      { id: 2, name: "Tunde Ade", role: "UI/UX Designer" },
+      { id: 3, name: "Grace Obasi", role: "Data Analyst" },
+      { id: 4, name: "Ibrahim Musa", role: "Backend Engineer" },
+      { id: 5, name: "Maryam Yusuf", role: "Product Manager" }
+    ];
+
+    const selected = new Set();
+
+    const list = document.getElementById('candidateList');
+    candidates.forEach(c => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.innerHTML = `<h3>${c.name}</h3><p>${c.role}</p>`;
+      card.addEventListener('click', () => {
+        if (selected.has(c.id)) {
+          selected.delete(c.id);
+          card.classList.remove('selected');
+        } else if (selected.size < 3) {
+          selected.add(c.id);
+          card.classList.add('selected');
+        } else {
+          alert("You can only select up to 3 candidates.");
+        }
+      });
+      list.appendChild(card);
+    });
+
+    async function sendSelected() {
+      document.getElementById('footerText').textContent = "it works!!";
+
+      if (selected.size === 0) {
+        alert("Please select at least one candidate.");
+        return;
+      }
+
+      const response = await fetch("http://157.180.39.138.5678/webhook/flow-selection", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: Array.from(selected) })
+      });
+
+      if (response.ok) {
+        alert("Interview invites sent successfully!");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    }
+  </script>
+</body>
+</html>
