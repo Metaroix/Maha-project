@@ -7,86 +7,202 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #1A122B;
+      background: linear-gradient(to right, #4d194d, #8c0834);
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
+      padding: 0;
+      margin: 0;
       min-height: 100vh;
+    }
+
+    /* 🔹 Fixed header bar */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #2B1F44;
+      color: #F6C90E;
+      text-align: center;
+      padding: 0.9rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    main {
+      margin-top: 80px; /* Pushes content below the header */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 1rem;
+      max-width: 500px;
     }
 
     h1 {
       color: #F6C90E;
+      font-size: 1.2rem;
+      text-align: center;
       margin-bottom: 1rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      width: 90%;
-      max-width: 900px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.6rem;
+      width: 100%;
     }
 
     .card {
       background: #2B1F44;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      padding: 0.6rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
       cursor: pointer;
       border: 2px solid transparent;
       transition: 0.3s;
+      text-align: center;
     }
 
     .card.selected {
       border: 2px solid #F6C90E;
-      transform: scale(1.03);
+      transform: scale(1.02);
     }
 
-    button {
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.4rem;
+      border: 2px solid #F6C90E;
+    }
+
+    .card h3 {
+      font-size: 0.9rem;
+      margin: 0.3rem 0 0.2rem;
+    }
+
+    .card p {
+      font-size: 0.75rem;
+      color: #ccc;
+      margin: 0 0 0.4rem;
+    }
+
+    /* Plain text "Details" button */
+    .details-btn {
+      background: none;
+      border: none;
+      color: #F6C90E;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .details-btn:hover {
+      color: #ffe680;
+    }
+
+    button[type="submit"] {
       background-color: #F6C90E;
       color: #1A122B;
-      padding: 0.8rem 1.5rem;
+      padding: 0.6rem 1.2rem;
       border: none;
       border-radius: 0.5rem;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 2rem;
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      width: 80%;
+      max-width: 250px;
+    }
+
+    button[type="submit"]:hover {
+      opacity: 0.9;
     }
 
     footer {
       margin-top: auto;
-      padding-top: 2rem;
+      padding-top: 1.2rem;
       color: #aaa;
-      font-size: 1rem;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        font-size: 1rem;
+        padding: 0.7rem 0;
+      }
+      h1 {
+        font-size: 1.1rem;
+      }
+      .card h3 {
+        font-size: 0.85rem;
+      }
+      .profile-pic {
+        width: 45px;
+        height: 45px;
+      }
+      .details-btn {
+        font-size: 0.7rem;
+      }
+      button[type="submit"] {
+        font-size: 0.85rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Select Candidates to Invite</h1>
-  <div class="cards" id="candidateList"></div>
-  <button onclick="sendSelected()">Send Interview Invites</button>
+  <header>
+    MAHA TALENT SELECTION
+  </header>
+
+  <main>
+    <h1>Select Candidates to Invite</h1>
+    <form onsubmit="sendSelected(event)">
+      <div class="cards" id="candidateList"></div>
+      <button type="submit">Send Interview Invites</button>
+    </form>
+  </main>
 
   <footer id="footerText"></footer>
 
   <script>
     const candidates = [
-      { id: 1, name: "Aisha Bello", role: "Frontend Developer" },
-      { id: 2, name: "Tunde Ade", role: "UI/UX Designer" },
-      { id: 3, name: "Grace Obasi", role: "Data Analyst" },
-      { id: 4, name: "Ibrahim Musa", role: "Backend Engineer" },
-      { id: 5, name: "Maryam Yusuf", role: "Product Manager" }
+      { id: 1, name: "Aisha Bello", role: "Frontend Developer", img: "https://via.placeholder.com/50" },
+      { id: 2, name: "Tunde Ade", role: "UI/UX Designer", img: "https://via.placeholder.com/50" },
+      { id: 3, name: "Grace Obasi", role: "Data Analyst", img: "https://via.placeholder.com/50" },
+      { id: 4, name: "Ibrahim Musa", role: "Backend Engineer", img: "https://via.placeholder.com/50" },
+      { id: 5, name: "Maryam Yusuf", role: "Product Manager", img: "https://via.placeholder.com/50" }
     ];
 
     const selected = new Set();
-
     const list = document.getElementById('candidateList');
+
     candidates.forEach(c => {
       const card = document.createElement('div');
       card.classList.add('card');
-      card.innerHTML = `<h3>${c.name}</h3><p>${c.role}</p>`;
-      card.addEventListener('click', () => {
+      card.innerHTML = `
+        <img src="${c.img}" alt="${c.name}" class="profile-pic">
+        <h3>${c.name}</h3>
+        <p>${c.role}</p>
+        <button class="details-btn" type="button" onclick="showDetails('${c.name}', '${c.role}')">Details</button>
+      `;
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('details-btn')) return;
         if (selected.has(c.id)) {
           selected.delete(c.id);
           card.classList.remove('selected');
@@ -100,7 +216,12 @@
       list.appendChild(card);
     });
 
-    async function sendSelected() {
+    function showDetails(name, role) {
+      alert(`${name}\nRole: ${role}`);
+    }
+
+    async function sendSelected(event) {
+      event.preventDefault();
       document.getElementById('footerText').textContent = "it works!!";
 
       if (selected.size === 0) {
@@ -108,7 +229,7 @@
         return;
       }
 
-      const response = await fetch("http://157.180.39.138.5678/webhook/flow-selection", {
+      const response = await fetch("http://157.180.39.138:5678/webhook/flow-selection", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: Array.from(selected) })
