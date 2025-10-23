@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Select Candidates - Maha</title>
   <style>
     body {
@@ -17,7 +17,6 @@
       min-height: 100vh;
     }
 
-    /* 🔹 Fixed header bar */
     header {
       position: fixed;
       top: 0;
@@ -34,7 +33,7 @@
     }
 
     main {
-      margin-top: 80px; /* Pushes content below the header */
+      margin-top: 80px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -100,7 +99,6 @@
       margin: 0 0 0.4rem;
     }
 
-    /* Plain text "Details" button */
     .details-btn {
       background: none;
       border: none;
@@ -139,6 +137,59 @@
       color: #aaa;
       font-size: 0.8rem;
       text-align: center;
+    }
+
+    /* blurrr */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #2B1F44;
+      color: white;
+      padding: 2rem;
+      border-radius: 0.8rem;
+      max-width: 300px;
+      width: 90%;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content h2 {
+      color: #F6C90E;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-content p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #F6C90E;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     @media (max-width: 480px) {
@@ -180,6 +231,15 @@
 
   <footer id="footerText"></footer>
 
+  <!-- Modal HTML -->
+  <div id="modal" class="modal" onclick="hideDetails(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="close-btn" onclick="hideDetails()">&times;</span>
+      <h2 id="modal-name">Candidate Name</h2>
+      <p id="modal-role">Candidate Role</p>
+    </div>
+  </div>
+
   <script>
     const candidates = [
       { id: 1, name: "Aisha Bello", role: "Frontend Developer", img: "https://via.placeholder.com/50" },
@@ -217,7 +277,13 @@
     });
 
     function showDetails(name, role) {
-      alert(`${name}\nRole: ${role}`);
+      document.getElementById("modal-name").textContent = name;
+      document.getElementById("modal-role").textContent = role;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function hideDetails(event) {
+      document.getElementById("modal").style.display = "none";
     }
 
     async function sendSelected(event) {
@@ -237,11 +303,10 @@
 
       if (response.ok) {
         alert("Interview invites sent successfully!");
-      } else {
+      } else {https://github.com/Metaroix/Maha-project/blob/main/index.html
         alert("Something went wrong. Please try again.");
       }
     }
   </script>
 </body>
 </html>
-
